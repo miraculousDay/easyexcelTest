@@ -69,7 +69,7 @@ public class UserRest extends BaseRest {
       */
     @PostMapping("/importExcel")
     public Result importExcel(HttpServletResponse response, @RequestParam MultipartFile file) throws IOException {
-        EasyExcelListener easyExcelListener = new EasyExcelListener(userService,UserExcelDto.class);
+        EasyExcelListener easyExcelListener = new EasyExcelListener(userService, UserExcelDto.class, 2);
         EasyExcelFactory.read(file.getInputStream(),UserExcelDto.class,easyExcelListener).sheet().doRead();
         List<ExcelCheckErrDto<UserExcelDto>> errList = easyExcelListener.getErrList();
         if (!errList.isEmpty()){//如果包含错误信息就导出错误信息

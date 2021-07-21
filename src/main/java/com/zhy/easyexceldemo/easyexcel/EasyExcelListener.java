@@ -36,6 +36,10 @@ public class EasyExcelListener <T>  extends AnalysisEventListener<T> {
     //excel对象的反射类
     private Class<T> clazz;
 
+    private int headLineMun = 1;
+
+    private int curDataLine = 0;
+
     public EasyExcelListener(ExcelCheckManager<T> excelCheckManager){
         this.excelCheckManager = excelCheckManager;
     }
@@ -45,9 +49,19 @@ public class EasyExcelListener <T>  extends AnalysisEventListener<T> {
         this.clazz = clazz;
     }
 
+    public EasyExcelListener(ExcelCheckManager<T> excelCheckManager,Class<T> clazz, int headLineMun){
+        this.excelCheckManager = excelCheckManager;
+        this.clazz = clazz;
+        this.headLineMun = headLineMun;
+    }
+
     @Override
     public void invoke(T t, AnalysisContext analysisContext) {
         String errMsg;
+        curDataLine++;
+        if (curDataLine < headLineMun) {
+            return;
+        }
         try {
             //根据excel数据实体中的javax.validation + 正则表达式来校验excel数据
             errMsg = EasyExcelValiHelper.validateEntity(t);
